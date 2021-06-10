@@ -21,7 +21,7 @@ projects:
   # sort_by options:
   #   - pushed
   #   - stars
-  limit: 9
+  limit: 5
   exclude:
     archived: false
     forks: false
@@ -45,6 +45,7 @@ social_media:
   # vk: your_username
   # website: http://your_website_url
   youtube: imtrinity94
+  soundcloud: imtrinity94
 
 topics:
   - name: vRealize Orchestrator
