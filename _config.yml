@@ -1,4 +1,4 @@
-layout: stacked
+layout: sidebar
 style: dark
 
 plugins:
@@ -24,35 +24,37 @@ projects:
   limit: 9
   exclude:
     archived: false
-    forks: true
+    forks: false
     projects:
     # - repo-name
 
-# social_media:
+social_media:
   # behance: your_username
   # dribbble: your_username
   # facebook: your_username
   # hackerrank: your_username
-  # instagram: your_username
+  instagram: imtrinity94
   # keybase: your_username
-  # linkedin: your_username
+  linkedin: mayankgoyal1994
   # mastodon: your_username
   # medium: your_username
   # stackoverflow: your_user_id
   # telegram: your_username
-  # twitter: your_username
+  twitter: imtrinity94
   # unsplash: your_username
   # vk: your_username
   # website: http://your_website_url
-  # youtube: your_username
+  youtube: imtrinity94
 
 topics:
-  - name: CSS
-    web_url: https://github.com/topics/css
-    image_url: https://raw.githubusercontent.com/github/explore/6c6508f34230f0ac0d49e847a326429eefbfc030/topics/css/css.png
+  - name: vRealize Orchestrator
+    web_url: https://www.vmware.com/in/products/vrealize-orchestrator.html
+    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/images.png
 
-  - name: Web design
+  - name: vSphere
+    web_url: https://www.vmware.com/in/products/vsphere.html
+    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/VMware-vSphere-7.jpg
 
-  - name: Sass
-    web_url: https://github.com/topics/sass
-    image_url: https://raw.githubusercontent.com/github/explore/6c6508f34230f0ac0d49e847a326429eefbfc030/topics/sass/sass.png
+  - name: Javascript
+    web_url: https://www.javascript.com/
+    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/js_800x800.jpg
