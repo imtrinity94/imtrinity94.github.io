@@ -50,12 +50,12 @@ social_media:
 topics:
   - name: vRealize Orchestrator
     web_url: https://www.vmware.com/in/products/vrealize-orchestrator.html
-    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/images.png
+    image_url: https://user-images.githubusercontent.com/7029361/121565185-df1b7f80-ca39-11eb-804e-51f5e917d1ec.png
 
   - name: vSphere
     web_url: https://www.vmware.com/in/products/vsphere.html
-    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/VMware-vSphere-7.jpg
+    image_url: https://user-images.githubusercontent.com/7029361/121565199-e2af0680-ca39-11eb-9d72-255e1b435170.jpg
 
   - name: Javascript
     web_url: https://www.javascript.com/
-    image_url: https://github.com/imtrinity94/imtrinity94.github.io/blob/master/js_800x800.jpg
+    image_url: https://user-images.githubusercontent.com/7029361/121565051-b7c4b280-ca39-11eb-9606-08c484c86025.jpg
