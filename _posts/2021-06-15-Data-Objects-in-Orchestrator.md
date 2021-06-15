@@ -39,7 +39,7 @@ Method One:
 
 In the first method, I use simple string concatenation. If the XML object is small, this is a fast and simple approach. It even allows adding dynamic values. As an example, I am going to reuse NSX stuff, creating the XML for the NSX controller deployment, because this is a small and understandable XML structure.
 
-```xml
+```javascript
 var xmlString =
 [
 '',
@@ -77,7 +77,7 @@ Creating larger powerShell scripts might be tricky in vRO. I am currently using 
 For this article, I am using a, what I think, very useful example. I had to deal with powerShell scripts being identical but are executed against various hosts in different domains. I guess, we’re all aware of the double hop issue we have and all the different necessary configurations to get this up and running. What I do is creating a PSCred object on the fly and add it to the script as authentication method used with different cmdlet’s.
 
 
-```powershell
+```javascript
 var powerShellScript =
 
 [
