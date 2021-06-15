@@ -8,7 +8,7 @@ published: true
 Creating JSON objects in vRO is pretty simple and straight forward. I mainly use two different methods, depending on the complexity. Method one is creating the object using string concatenation (useful for small and simple objects), and method two is the Properties object, which is, my opinion, better for more complex objects, especially if initially I don’t know how many entries the object is going to have or adding arrays.
 
 Method One:
-```json
+```javascipt
 var jsonObject =
 {
       "name": "Matthias",
