@@ -11,6 +11,7 @@ I have taken the code from the action and flattened it out below for you to use.
 
 In the code below you would replace ‘AutomationPro/Example’ with your Category path.
 
+## Javascript
 ```javascript
 var category = Server.getConfigurationElementCategoryWithPath("AutomationPro/Example");
 if (category == null) {
