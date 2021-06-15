@@ -39,7 +39,7 @@ Method One:
 
 In the first method, I use simple string concatenation. If the XML object is small, this is a fast and simple approach. It even allows adding dynamic values. As an example, I am going to reuse NSX stuff, creating the XML for the NSX controller deployment, because this is a small and understandable XML structure.
 
-```javascript
+```xml
 var xmlString =
 [
 '',
@@ -58,21 +58,6 @@ This example uses simple string concatenation. Please recognize the square brack
 Method Two:
 
 I am using the same XML but this time I create an E4X object straight ahead, which allows to easily add and/or change values. This is very useful for large XML objects. Be aware, if you’re not changing the value of a specific tag, the value provided during the object creation will remain.
-
-
-```javascript
-var controllerSpec =
-
-      nsx-controller-node1
-      nsx-controller
-      ipPool-1
-      domain-c1
-      datastore-1
-      dvportgroup-1
-      MyTestPassword
-;
-```
-Now that we’ve created the XML object, we need to add/change the values:
 
 ```javascript
 controllerSpec.name = controllerName;
