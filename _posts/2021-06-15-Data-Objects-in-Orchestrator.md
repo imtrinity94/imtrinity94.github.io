@@ -1,3 +1,8 @@
+---
+title: "Data Object in Orchestrator"
+published: true
+---
+
 # JSON
 
 Creating JSON objects in vRO is pretty simple and straight forward. I mainly use two different methods, depending on the complexity. Method one is creating the object using string concatenation (useful for small and simple objects), and method two is the Properties object, which is, my opinion, better for more complex objects, especially if initially I don’t know how many entries the object is going to have or adding arrays.
@@ -22,6 +27,7 @@ var jsonObject = new Properties();
 jsonObject.name = "Matthias";
 jsonObject.company = "comdivision";
 jsonObject.hobbies = ["cooking","skiing"];
+```
 
 The second method, as we all can see, is easier and provides a better readability, especially if it comes to large objects.
 
@@ -78,7 +84,13 @@ controllerSpec.networkId = portGroupId;
 controllerSpec.password = passwordSecureString;
 ```
 
-Using E4X allows us accessing the tags using a dot. This is great if we deal with larger XML data structures and especially nested structures. Be aware, the second method creates an XML object. If you would like to use it for REST calls, it needs to be converted into string upfront using the .toString() method. I our example, you would do the following:
+Using E4X allows us accessing the tags using a dot. This is great if we deal with larger XML data structures and especially nested structures. Be aware, the second method creates an XML object. If you would like to use it for REST calls, it needs to be converted into string upfront using the .toString() method. 
+
+# Powershell
+Creating larger powerShell scripts might be tricky in vRO. I am currently using the already mentioned string concatenation method. It works great for all kind of scripts created for diverse command lines like bash.
+
+For this article, I am using a, what I think, very useful example. I had to deal with powerShell scripts being identical but are executed against various hosts in different domains. I guess, we’re all aware of the double hop issue we have and all the different necessary configurations to get this up and running. What I do is creating a PSCred object on the fly and add it to the script as authentication method used with different cmdlet’s.
+
 
 ```powershell
 var powerShellScript =
@@ -91,22 +103,6 @@ var powerShellScript =
 ].join('\n');
 ```
 
-# Powershell
-Creating larger powerShell scripts might be tricky in vRO. I am currently using the already mentioned string concatenation method. It works great for all kind of scripts created for diverse command lines like bash.
-
-For this article, I am using a, what I think, very useful example. I had to deal with powerShell scripts being identical but are executed against various hosts in different domains. I guess, we’re all aware of the double hop issue we have and all the different necessary configurations to get this up and running. What I do is creating a PSCred object on the fly and add it to the script as authentication method used with different cmdlet’s.
-
-var powerShellScript =
-
-In this example, I haven’t created the $computer variable. As you can see, this is an easy approach adding a dynamic credential object into a powerShell script to authenticate against various destinations without dealing with the double hop issue.
-
-
-
-PLEASE NOTE: the credentials example used for powerShell is just an idea and has not been validated if it is a secure method and works only, if the used cmdlet supports the -credential option.
-
-Have fun creating and using the different data objects.
-
-‍
 
 
 
