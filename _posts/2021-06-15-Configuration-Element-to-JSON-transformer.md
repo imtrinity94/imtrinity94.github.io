@@ -3,6 +3,8 @@ title: "Configuration Element to Json Transformer"
 published: true
 ---
 
+![codeIcon](https://user-images.githubusercontent.com/7029361/122019388-573ec800-cde1-11eb-99ad-08c293b7c108.png)
+
 I love using Configuration Elements in VMware vRO to store repetitive information. What I don’t like is making multiple calls to get information back or making a call which pulls back a load of data that I then have to man handle through my flow to where I need it.
 
 To make life easier, I use some code in an action to go to a configuration element path and then pull back all the elements and their attributes underneath. This code then constructs a structured JSON object from it, so you can simply pass it around throughout the flow and pull the data back when you need it.
