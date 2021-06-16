@@ -1,3 +1,8 @@
+---
+title: "Execute REST request vRO Action"
+published: true
+---
+
 ### Introduction
 This action can be utilized as the lowest level action with any form of REST communication, to be called by higher level actions or workflows.  It encapsulate the REST communication with the vRO REST plugin into one spot, checks for errors always, and provides a simplified mechanism of working with REST calls within vRO.  Callers of this REST action get to operate at a higher level of abstraction which greatly improves readability as the caller gets to just list out the REST communication details from an API standpoint, rather than mixing in the mechanism by which it's done at the vRO level (ie: vRO REST plugin).
 
