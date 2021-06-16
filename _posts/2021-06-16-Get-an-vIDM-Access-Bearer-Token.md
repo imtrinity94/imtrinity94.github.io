@@ -1,6 +1,6 @@
 ---
 title: "Get an vIDM Access Bearer Token"
-published: true
+published: false
 ---
 ```javascript
 //Prerequisites
