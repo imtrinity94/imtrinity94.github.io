@@ -1,5 +1,5 @@
 ---
-title: "Configuration Element to Json Transformer"
+title: "Creating vRO Configuration Element in Bulk using CSV file"
 published: true
 ---
 How to create configuration elements in bulk in various dev, staging and production environments. Just create a single csv file and put its content inside this vRO workflow and you are good to go.
