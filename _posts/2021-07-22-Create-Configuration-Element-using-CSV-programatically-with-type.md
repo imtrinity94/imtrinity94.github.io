@@ -17,6 +17,7 @@ How to create configuration elements in bulk in various dev, staging and product
  -  password       SecureString   password    -
  -  useCount       number         14          -
  -  valid?         boolean        true        -
+ -  url            path           /bin/conf/  -
  ----------------------------------------------
 */
 var configCategory = Server.getConfigurationElementCategoryWithPath(categoryPath);
@@ -54,3 +55,12 @@ for (var i in _lines) {
     }
     configElement.setAttributeWithKey(key,allValues,type);
 ```
+<h2>Input</h2>
+
+![Screenshot_1](https://user-images.githubusercontent.com/7029361/127157316-1697a1ca-b6ee-4c7b-9aa2-5725f05f699c.png)
+
+<h2>Output</h2>
+
+![Screenshot_2](https://user-images.githubusercontent.com/7029361/127157337-621b8448-0104-4e14-aa79-8e4bea2a74b9.png)
+
+
