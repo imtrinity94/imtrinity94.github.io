@@ -56,6 +56,7 @@ topics:
     web_url: https://www.vmware.com/in/products/vsphere.html
     image_url: https://user-images.githubusercontent.com/7029361/121565199-e2af0680-ca39-11eb-9d72-255e1b435170.jpg
 
-  - name: Javascript
-    web_url: https://www.javascript.com/
+  - name: Cloud Director
+    web_url: https://www.vmware.com/in/products/cloud-director.html
     image_url: https://user-images.githubusercontent.com/7029361/121565051-b7c4b280-ca39-11eb-9606-08c484c86025.jpg
+    
