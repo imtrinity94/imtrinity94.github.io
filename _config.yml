@@ -1,5 +1,5 @@
 layout: sidebar
-style: dark
+style: light
 
 plugins:
   - jekyll-octicons
@@ -31,7 +31,7 @@ projects:
 social_media:
   # behance: your_username
   # dribbble: your_username
-  # facebook: your_username
+  facebook: imtrinity94
   # hackerrank: your_username
   instagram: imtrinity94
   # keybase: your_username
@@ -39,13 +39,13 @@ social_media:
   # mastodon: your_username
   # medium: your_username
   stackoverflow: 16106917
-  # telegram: your_username
+  telegram: imtrinity94
   twitter: imtrinity94
   unsplash: imtrinity94
   # vk: your_username
-  # website: http://your_website_url
+  website: https://cloudblogger2021.wordpress.com
   youtube: imtrinity94
-  # soundcloud: imtrinity94
+  soundcloud: imtrinity94
 
 topics:
   - name: vRealize Orchestrator
