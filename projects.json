@@ -1,0 +1,86 @@
+{
+  "_readme": "featured = big cards in this order (title/tagline/tags/link optional; GitHub data fills the rest). hidden = never shown. Every other own public, non-fork, non-archived repo is listed automatically. Open the site with ?curate to pick visually and download a new copy of this file.",
+  "github": "imtrinity94",
+  "featured": [
+    {
+      "repo": "modern-vroapi",
+      "title": "Modern vRO API",
+      "tagline": "A modern, lightning-fast API explorer for VCF Orchestrator — every class, method and plugin, searchable.",
+      "tags": [
+        "vRO",
+        "Docs",
+        "Web"
+      ],
+      "link": "https://modernvroapi.in"
+    },
+    {
+      "repo": "vcf-orchestrator-mcp",
+      "title": "VCF Orchestrator MCP",
+      "tagline": "MCP server that lets AI agents read, write, run and package VCF Orchestrator content.",
+      "tags": [
+        "MCP",
+        "vRO",
+        "AI"
+      ]
+    },
+    {
+      "repo": "vcf-automation-mcp",
+      "title": "VCF Automation MCP",
+      "tagline": "MCP server for VCF Automation — blueprints, catalog, deployments and IaaS, driven by AI.",
+      "tags": [
+        "MCP",
+        "VCFA",
+        "AI"
+      ]
+    },
+    {
+      "repo": "vRO-Peekage",
+      "title": "vRO Peekage",
+      "tagline": "Drop a .package file and browse workflows, actions and config elements right in the browser.",
+      "tags": [
+        "vRO",
+        "Web"
+      ]
+    },
+    {
+      "repo": "vcfa-ledger",
+      "title": "VCFA Ledger",
+      "tagline": "Capture and view every VCF Automation customisation — templates, catalog, policies, ABX — like a vRO package.",
+      "tags": [
+        "VCFA",
+        "Tooling"
+      ]
+    },
+    {
+      "repo": "vcf-orchestrator-guide",
+      "title": "VCF Orchestrator Guide",
+      "tagline": "A free, open book on VCF Operations Orchestrator 9.x — from first workflow to production patterns.",
+      "tags": [
+        "vRO",
+        "Book"
+      ]
+    },
+    {
+      "repo": "Curl2vRO",
+      "title": "Curl2vRO",
+      "tagline": "Paste a curl command, get ready-to-run vRO JavaScript. npm package + web app.",
+      "tags": [
+        "vRO",
+        "npm"
+      ]
+    },
+    {
+      "repo": "VCFA-Configuration_Workbook-Generator",
+      "title": "VCFA Workbook Generator",
+      "tagline": "Generate complete VCF Automation configuration workbooks straight from a live environment.",
+      "tags": [
+        "VCFA",
+        "Docs"
+      ]
+    }
+  ],
+  "hidden": [
+    "imtrinity94",
+    "imtrinity94.github.io"
+  ]
+}

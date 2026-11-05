@@ -1,3 +1,211 @@
----
-layout: home
----
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mayank Goyal — Orchestrating the Cloud</title>
+  <meta name="description" content="Mayank Goyal — VCF Automation & Orchestrator architect. Tools, MCP servers, open books and experiments for vRO, VCF Automation and VCF.">
+  <meta name="theme-color" content="#04050a">
+  <meta property="og:title" content="Mayank Goyal — Orchestrating the Cloud">
+  <meta property="og:description" content="VCF Automation & Orchestrator architect. Tools, MCP servers and open source for vRO, VCFA and VCF.">
+  <meta property="og:image" content="https://imtrinity94.github.io/assets/img/og.png">
+  <meta property="og:url" content="https://imtrinity94.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700;900&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script type="importmap">{ "imports": { "three": "./assets/vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <!-- boot sequence -->
+  <div id="boot" aria-hidden="true">
+    <pre id="boot-log"></pre>
+    <div class="boot-bar"><span></span></div>
+  </div>
+
+  <canvas id="hero-gl" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+  <div id="cursor" aria-hidden="true"><span></span></div>
+
+  <header class="nav">
+    <a href="#top" class="logo" data-magnetic><span class="logo-mark">MG</span><span class="logo-dot"></span></a>
+    <nav>
+      <a href="#projects" data-scramble>Projects</a>
+      <a href="#all" data-scramble>Archive</a>
+      <a href="#stack" data-scramble>Stack</a>
+      <a href="#blog" data-scramble>Blog</a>
+      <a href="#contact" data-scramble>Contact</a>
+    </nav>
+    <button class="kbar-btn" id="kbar-open" data-magnetic><span class="mono" id="kbd">Ctrl K</span> Search</button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-meta mono reveal">
+        <span class="pulse"></span> SYSTEM ONLINE · <span id="clock">--:--:--</span> IST · NODE imtrinity94
+      </div>
+      <h1 class="hero-title">
+        <span class="line"><span class="word" data-glitch="MAYANK">MAYANK</span></span>
+        <span class="line"><span class="word outline" data-glitch="GOYAL">GOYAL</span></span>
+      </h1>
+      <p class="hero-sub reveal">
+        I orchestrate clouds. Architect for <b>VCF Automation</b> &amp; <b>Orchestrator</b> by day, builder of
+        <span class="typer" id="typer"></span><span class="caret">_</span>
+      </p>
+      <div class="hero-cta reveal">
+        <a href="#projects" class="btn btn-primary" data-magnetic><span>Explore projects</span><i>↓</i></a>
+        <a href="https://cloudblogger.co.in" class="btn btn-ghost" target="_blank" rel="noopener" data-magnetic><span>Read cloudblogger</span><i>↗</i></a>
+      </div>
+      <div class="hero-stats reveal">
+        <div><b data-count="0" id="stat-repos">0</b><span>public projects</span></div>
+        <div><b data-count="0" id="stat-stars">0</b><span>GitHub stars</span></div>
+        <div><b data-count="0" id="stat-feat">0</b><span>featured builds</span></div>
+        <div><b data-count="0" id="stat-langs">0</b><span>languages shipped</span></div>
+      </div>
+      <div class="scroll-hint mono"><span></span>SCROLL</div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>VCF ORCHESTRATOR</span><i>✦</i><span>VCF AUTOMATION 9</span><i>✦</i><span>MCP SERVERS</span><i>✦</i><span>JAVASCRIPT ES5.1</span><i>✦</i><span>ARIA AUTOMATION</span><i>✦</i><span>NSX</span><i>✦</i><span>VMWARE CLOUD FOUNDATION</span><i>✦</i><span>OPEN SOURCE</span><i>✦</i>
+        <span>VCF ORCHESTRATOR</span><i>✦</i><span>VCF AUTOMATION 9</span><i>✦</i><span>MCP SERVERS</span><i>✦</i><span>JAVASCRIPT ES5.1</span><i>✦</i><span>ARIA AUTOMATION</span><i>✦</i><span>NSX</span><i>✦</i><span>VMWARE CLOUD FOUNDATION</span><i>✦</i><span>OPEN SOURCE</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- FEATURED -->
+    <section id="projects" class="section">
+      <div class="section-head">
+        <span class="kicker mono">// 01 — FEATURED</span>
+        <h2 class="reveal">Things I've <em>built</em></h2>
+        <p class="reveal muted">Live from GitHub. Hover the cards — they're holograms.</p>
+      </div>
+      <div class="featured" id="featured"></div>
+    </section>
+
+    <!-- ALL -->
+    <section id="all" class="section">
+      <div class="section-head">
+        <span class="kicker mono">// 02 — ARCHIVE</span>
+        <h2 class="reveal">Every <em>experiment</em></h2>
+        <p class="reveal muted">New repositories appear here automatically the moment they go public.</p>
+      </div>
+      <div class="toolbar reveal">
+        <label class="search"><span class="mono">&gt;</span><input id="filter-q" placeholder="filter repositories…" autocomplete="off"></label>
+        <div class="chips" id="chips"></div>
+        <div class="sort mono">
+          <button data-sort="pushed" class="on">RECENT</button>
+          <button data-sort="stars">STARS</button>
+          <button data-sort="name">A–Z</button>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="api-note mono muted" id="api-note"></p>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack" class="section">
+      <div class="section-head">
+        <span class="kicker mono">// 03 — STACK</span>
+        <h2 class="reveal">Where I <em>live</em></h2>
+      </div>
+      <div class="stack">
+        <article class="stack-card reveal" data-tilt>
+          <span class="mono idx">01</span>
+          <h3>VCF Orchestrator</h3>
+          <p>Workflows, actions, plug-ins and packages since the vCO days — vRO 7 through 9.x. Polyglot handlers, REST, guest operations.</p>
+          <div class="meter"><span style="--w:98%"></span></div>
+        </article>
+        <article class="stack-card reveal" data-tilt>
+          <span class="mono idx">02</span>
+          <h3>VCF Automation</h3>
+          <p>vRA 7 → Aria Automation 8 → VCFA 9. Blueprints, ABX, catalog, policies, Event Broker and the VM Apps / All Apps organisations.</p>
+          <div class="meter"><span style="--w:95%"></span></div>
+        </article>
+        <article class="stack-card reveal" data-tilt>
+          <span class="mono idx">03</span>
+          <h3>JavaScript ES5.1</h3>
+          <p>The Rhino dialect that runs every vRO script. Clean, testable, no-surprises code that survives upgrades.</p>
+          <div class="meter"><span style="--w:96%"></span></div>
+        </article>
+        <article class="stack-card reveal" data-tilt>
+          <span class="mono idx">04</span>
+          <h3>VMware Cloud Foundation</h3>
+          <p>Designing and building VCF 9.x platforms end to end — LLDs, deployments, NSX VPCs and the automation layer on top.</p>
+          <div class="meter"><span style="--w:90%"></span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section id="blog" class="section">
+      <div class="section-head">
+        <span class="kicker mono">// 04 — TRANSMISSIONS</span>
+        <h2 class="reveal">Latest from <em>cloudblogger</em></h2>
+      </div>
+      <div class="posts" id="posts">
+        <a class="post skeleton"></a><a class="post skeleton"></a><a class="post skeleton"></a>
+      </div>
+      <div class="center reveal"><a href="https://cloudblogger.co.in" target="_blank" rel="noopener" class="btn btn-ghost" data-magnetic><span>All articles</span><i>↗</i></a></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <span class="kicker mono">// 05 — UPLINK</span>
+      <h2 class="mega reveal"><a href="https://www.linkedin.com/in/mayankgoyal1994" target="_blank" rel="noopener" data-magnetic>Let's <em>connect</em> ↗</a></h2>
+      <div class="socials reveal">
+        <a href="https://github.com/imtrinity94" target="_blank" rel="noopener" data-magnetic>GitHub</a>
+        <a href="https://www.linkedin.com/in/mayankgoyal1994" target="_blank" rel="noopener" data-magnetic>LinkedIn</a>
+        <a href="https://cloudblogger.co.in" target="_blank" rel="noopener" data-magnetic>Blog</a>
+        <a href="https://www.npmjs.com/~imtrinity94" target="_blank" rel="noopener" data-magnetic>npm</a>
+        <a href="https://x.com/imtrinity94" target="_blank" rel="noopener" data-magnetic>X</a>
+        <a href="https://www.youtube.com/imtrinity94" target="_blank" rel="noopener" data-magnetic>YouTube</a>
+        <a href="https://stackoverflow.com/u/16106917" target="_blank" rel="noopener" data-magnetic>Stack Overflow</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <span>© <span id="yr"></span> Mayank Goyal</span>
+    <span>Rendered in WebGL · served by GitHub Pages</span>
+    <a href="#top">↑ TOP</a>
+  </footer>
+
+  <!-- command palette -->
+  <div id="kbar" role="dialog" aria-modal="true" aria-label="Search projects" hidden>
+    <div class="kbar-panel">
+      <label class="kbar-input"><span class="mono">&gt;</span><input id="kbar-q" placeholder="Jump to a project…" autocomplete="off"></label>
+      <ul id="kbar-list"></ul>
+      <div class="kbar-foot mono"><span>↑↓ navigate</span><span>↵ open</span><span>esc close</span></div>
+    </div>
+  </div>
+
+  <!-- curate mode (?curate) -->
+  <div id="curate" hidden>
+    <div class="curate-panel">
+      <div class="curate-head">
+        <div>
+          <span class="kicker mono">// CURATOR MODE</span>
+          <h3>Which projects do you want to feature?</h3>
+          <p class="muted" id="curate-new"></p>
+        </div>
+        <button class="btn btn-ghost" id="curate-close"><span>Close</span></button>
+      </div>
+      <div class="curate-list" id="curate-list"></div>
+      <div class="curate-foot">
+        <span class="muted mono">★ feature · ◌ auto · ✕ hide</span>
+        <button class="btn btn-primary" id="curate-save"><span>Download projects.json</span><i>↓</i></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script type="module" src="assets/js/hero.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
