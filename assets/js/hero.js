@@ -112,26 +112,39 @@ if (renderer) {
   resize();
   window.addEventListener("resize", resize);
 
-  // Fade the canvas out once the hero has scrolled away (opacity only, no motion).
+  // Fade the globe to nothing as the hero scrolls away (opacity only, no motion).
+  // Once it is fully faded, rendering pauses so nothing sits behind the content.
   const hero = document.querySelector(".hero");
+  let faded = false;
   function onScroll() {
-    const p = Math.min(window.scrollY / ((hero ? hero.offsetHeight : window.innerHeight) * .8), 1);
-    canvas.style.opacity = String(1 - p * .85);
+    const h = hero ? hero.offsetHeight : window.innerHeight;
+    const p = Math.min(Math.max(window.scrollY / (h * .6), 0), 1);
+    const o = 1 - p * p * (3 - 2 * p); // smoothstep: eases in and out
+    canvas.style.opacity = o.toFixed(3);
+    canvas.style.visibility = o <= 0.001 ? "hidden" : "visible";
+    const wasFaded = faded;
+    faded = o <= 0.001;
+    if (wasFaded && !faded && !reduced && !running) requestAnimationFrame(tick);
   }
   window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
 
   let visible = !document.hidden;
-  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !reduced) requestAnimationFrame(tick); });
+  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !faded && !reduced && !running) requestAnimationFrame(tick); });
 
+  // Subtle rotation: one full turn about every 100 seconds, on a slight tilt.
+  points.rotation.x = 0.35;
+  points.rotation.z = -0.12;
   const start = performance.now();
+  let running = false;
   function tick() {
-    if (!visible) return;
+    if (!visible || faded) { running = false; return; }
+    running = true;
     const t = (performance.now() - start) / 1000;
     uniforms.uTime.value = t;
-    points.rotation.y = t * .015;
+    points.rotation.y = t * .063;
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   }
-  if (reduced) renderer.render(scene, camera); else tick();
+  onScroll();
+  if (reduced) renderer.render(scene, camera); else if (!running) tick();
 }
