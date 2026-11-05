@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 // Calm background: a slowly breathing particle sphere. No scroll effects,
-// barely any mouse response, and fully static when reduced motion is on.
+// no mouse response, and only a slow rotation when reduce-motion is on.
 const canvas = document.getElementById("hero-gl");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -124,14 +124,16 @@ if (renderer) {
     canvas.style.visibility = o <= 0.001 ? "hidden" : "visible";
     const wasFaded = faded;
     faded = o <= 0.001;
-    if (wasFaded && !faded && !reduced && !running) requestAnimationFrame(tick);
+    if (wasFaded && !faded && !running) requestAnimationFrame(tick);
   }
   window.addEventListener("scroll", onScroll, { passive: true });
 
   let visible = !document.hidden;
-  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !faded && !reduced && !running) requestAnimationFrame(tick); });
+  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !faded && !running) requestAnimationFrame(tick); });
 
   // Subtle rotation: one full turn about every 100 seconds, on a slight tilt.
+  // It always runs (it's slow and steady); with reduce-motion on, only the
+  // surface 'breathing' is switched off.
   points.rotation.x = 0.35;
   points.rotation.z = -0.12;
   const start = performance.now();
@@ -140,11 +142,11 @@ if (renderer) {
     if (!visible || faded) { running = false; return; }
     running = true;
     const t = (performance.now() - start) / 1000;
-    uniforms.uTime.value = t;
+    if (!reduced) uniforms.uTime.value = t;
     points.rotation.y = t * .063;
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   }
   onScroll();
-  if (reduced) renderer.render(scene, camera); else if (!running) tick();
+  if (!running) tick();
 }
