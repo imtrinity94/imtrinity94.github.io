@@ -12,4 +12,4 @@ Live at **https://imtrinity94.github.io**
 
 ## Stack
 
-Plain HTML/CSS/JS with no build step. The particle hero is WebGL (Three.js + custom GLSL noise shaders) and the motion is GSAP + ScrollTrigger, both bundled in `assets/vendor`. Blog posts come from the cloudblogger.co.in WordPress.com public API. Shortcuts: `Ctrl/⌘ K` or `/` opens the command palette.
+Plain HTML/CSS/JS with no build step. The background is a slow, subtle WebGL particle sphere (Three.js, bundled in `assets/vendor`). It stays still when the system's reduce-motion setting is on. Blog posts come from the cloudblogger.co.in WordPress.com public API. Shortcuts: `Ctrl/⌘ K` or `/` opens the command palette.

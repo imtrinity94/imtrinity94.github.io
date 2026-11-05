@@ -1,24 +1,24 @@
 import * as THREE from "three";
 
+// Calm background: a slowly breathing particle sphere. No scroll effects,
+// barely any mouse response, and fully static when reduced motion is on.
 const canvas = document.getElementById("hero-gl");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "low-power" });
 } catch (e) {
   canvas.remove();
 }
 
 if (renderer) {
   const mobile = window.innerWidth < 760;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
-  camera.position.set(0, 0, 6);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
 
-  // --- particle sphere (fibonacci distribution) ---
-  const COUNT = mobile ? 9000 : 22000;
+  const COUNT = mobile ? 5000 : 12000;
   const pos = new Float32Array(COUNT * 3);
   const rnd = new Float32Array(COUNT);
   const golden = Math.PI * (3 - Math.sqrt(5));
@@ -37,11 +37,8 @@ if (renderer) {
 
   const uniforms = {
     uTime: { value: 0 },
-    uMouse: { value: new THREE.Vector2(0, 0) },
-    uScroll: { value: 0 },
     uPixel: { value: renderer.getPixelRatio() },
-    uIntro: { value: 0 },
-    uAlpha: { value: mobile ? .75 : 1 }
+    uAlpha: { value: mobile ? .35 : .7 }
   };
 
   const noise = /* glsl */`
@@ -75,121 +72,66 @@ if (renderer) {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
     vertexShader: noise + /* glsl */`
-      uniform float uTime; uniform vec2 uMouse; uniform float uScroll; uniform float uPixel; uniform float uIntro;
+      uniform float uTime; uniform float uPixel;
       attribute float aRnd;
-      varying float vN; varying float vRnd; varying float vDepth;
+      varying float vN; varying float vDepth;
       void main(){
         vec3 p = position;
-        float t = uTime * .18;
-        float n = snoise(p * 1.4 + vec3(t, t * .7, -t));
-        float n2 = snoise(p * 3.2 - vec3(t * 1.3));
-        float disp = n * .38 + n2 * .09 + length(uMouse) * .25 * n;
-        // explode outward on scroll, implode on intro
-        float burst = uScroll * (1.2 + aRnd * 2.5);
-        p *= (1.6 + disp + burst) * uIntro;
-        // swirl
-        float a = uScroll * 1.2 + p.y * .25 * uScroll;
-        p.xz = mat2(cos(a), -sin(a), sin(a), cos(a)) * p.xz;
+        float n = snoise(p * 1.2 + vec3(uTime * .04));
+        p *= 1.7 + n * .12;
         vec4 mv = modelViewMatrix * vec4(p, 1.);
         gl_Position = projectionMatrix * mv;
-        gl_PointSize = (2.2 + aRnd * 2.6) * uPixel * (5.5 / -mv.z);
-        vN = n; vRnd = aRnd; vDepth = -mv.z;
+        gl_PointSize = (1.6 + aRnd * 1.6) * uPixel * (5.5 / -mv.z);
+        vN = n; vDepth = -mv.z;
       }`,
     fragmentShader: /* glsl */`
-      uniform float uScroll; uniform float uAlpha;
-      varying float vN; varying float vRnd; varying float vDepth;
+      uniform float uAlpha;
+      varying float vN; varying float vDepth;
       void main(){
-        vec2 c = gl_PointCoord - .5;
-        float d = length(c);
+        float d = length(gl_PointCoord - .5);
         if (d > .5) discard;
         float glow = smoothstep(.5, 0., d);
-        vec3 cyan = vec3(.235, .94, 1.);
-        vec3 violet = vec3(.545, .36, 1.);
-        vec3 pink = vec3(1., .235, .675);
-        vec3 col = mix(cyan, violet, smoothstep(-.4, .4, vN));
-        col = mix(col, pink, smoothstep(.45, .9, vN) * .9);
-        col += step(.985, vRnd) * .8; // sparkle
-        float fade = smoothstep(9., 3.5, vDepth);
-        gl_FragColor = vec4(col, glow * .85 * fade * (1. - uScroll * .6) * uAlpha);
+        vec3 a = vec3(.45, .78, 1.);   // soft blue
+        vec3 b = vec3(.55, .52, .95);  // soft indigo
+        vec3 col = mix(a, b, smoothstep(-.5, .5, vN));
+        float fade = smoothstep(9., 3.8, vDepth);
+        gl_FragColor = vec4(col, glow * .55 * fade * uAlpha);
       }`
   });
   const points = new THREE.Points(geo, mat);
   scene.add(points);
 
-  // --- orbit rings ---
-  const ringGroup = new THREE.Group();
-  const ringMat = new THREE.LineBasicMaterial({ color: 0x3cf0ff, transparent: true, opacity: .18 });
-  for (let k = 0; k < 3; k++) {
-    const curve = new THREE.EllipseCurve(0, 0, 2.6 + k * .45, 2.6 + k * .45, 0, Math.PI * 2);
-    const g = new THREE.BufferGeometry().setFromPoints(curve.getPoints(180));
-    const ring = new THREE.LineLoop(g, ringMat.clone());
-    ring.material.opacity = .16 - k * .04;
-    ring.rotation.x = Math.PI / 2 + (k - 1) * .35;
-    ring.rotation.y = k * .6;
-    ringGroup.add(ring);
-  }
-  scene.add(ringGroup);
-
-  // --- starfield ---
-  const SC = mobile ? 600 : 1500;
-  const sp = new Float32Array(SC * 3);
-  for (let i = 0; i < SC; i++) {
-    sp[i * 3] = (Math.random() - .5) * 40;
-    sp[i * 3 + 1] = (Math.random() - .5) * 40;
-    sp[i * 3 + 2] = -Math.random() * 30 - 2;
-  }
-  const sg = new THREE.BufferGeometry();
-  sg.setAttribute("position", new THREE.BufferAttribute(sp, 3));
-  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0x9aa4ff, size: .035, transparent: true, opacity: .6, depthWrite: false }));
-  scene.add(stars);
-
-  // --- interaction ---
-  const mouse = new THREE.Vector2(0, 0);
-  const target = new THREE.Vector2(0, 0);
-  window.addEventListener("pointermove", (e) => {
-    target.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
-  }, { passive: true });
-
   function resize() {
     const w = window.innerWidth, h = window.innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // keep sphere on the right on wide screens, centred on mobile
-    camera.position.z = w > 900 ? 6 : 7.2;
-    camera.setViewOffset(w, h, w > 900 ? -w * .18 : 0, w > 900 ? 0 : h * .05, w, h);
+    camera.position.z = w > 900 ? 6 : 7.5;
+    camera.setViewOffset(w, h, w > 900 ? -w * .2 : 0, w > 900 ? 0 : h * .05, w, h);
     camera.updateProjectionMatrix();
   }
   resize();
   window.addEventListener("resize", resize);
 
-  let scrollP = 0;
-  window.addEventListener("scroll", () => {
-    scrollP = Math.min(window.scrollY / (window.innerHeight * 1.2), 1);
-  }, { passive: true });
+  // Fade the canvas out once the hero has scrolled away (opacity only, no motion).
+  const hero = document.querySelector(".hero");
+  function onScroll() {
+    const p = Math.min(window.scrollY / ((hero ? hero.offsetHeight : window.innerHeight) * .8), 1);
+    canvas.style.opacity = String(1 - p * .85);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  let visible = !document.hidden;
+  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !reduced) requestAnimationFrame(tick); });
 
   const start = performance.now();
-  let visible = true;
-  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible) tick(); });
-
   function tick() {
     if (!visible) return;
     const t = (performance.now() - start) / 1000;
-    mouse.lerp(target, .05);
-    uniforms.uTime.value = reduced ? 0 : t;
-    uniforms.uMouse.value.copy(mouse);
-    uniforms.uScroll.value += (scrollP - uniforms.uScroll.value) * .08;
-    const introTarget = window.__booted ? 1 : 0.001;
-    uniforms.uIntro.value += (introTarget - uniforms.uIntro.value) * .045;
-    points.rotation.y = t * .06 + mouse.x * .4;
-    points.rotation.x = mouse.y * .25;
-    ringGroup.rotation.z = t * .05;
-    ringGroup.rotation.x = mouse.y * .2;
-    ringGroup.children.forEach((r, i) => { r.material.opacity = (.16 - i * .04) * (1 - uniforms.uScroll.value); });
-    stars.rotation.z = t * .01;
-    stars.position.x = -mouse.x * .5;
-    stars.position.y = -mouse.y * .5;
+    uniforms.uTime.value = t;
+    points.rotation.y = t * .015;
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   }
-  tick();
+  if (reduced) renderer.render(scene, camera); else tick();
 }
