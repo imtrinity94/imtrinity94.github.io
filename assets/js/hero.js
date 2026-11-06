@@ -1,7 +1,9 @@
 import * as THREE from "three";
 
-// Calm background: a slowly breathing particle sphere. No scroll effects,
-// no mouse response, and only a slow rotation when reduce-motion is on.
+// Hero globe: a bright, gently twinkling particle sphere that turns slowly
+// on a slight tilt. Scrolling down makes it expand outward and dissolve into
+// nothing; scrolling back up gathers it again. No mouse response.
+// With reduce-motion on, the rotation stays but twinkle and breathing stop.
 const canvas = document.getElementById("hero-gl");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -18,7 +20,8 @@ if (renderer) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
 
-  const COUNT = mobile ? 5000 : 12000;
+  // Points spread evenly over a sphere (fibonacci lattice).
+  const COUNT = mobile ? 6000 : 14000;
   const pos = new Float32Array(COUNT * 3);
   const rnd = new Float32Array(COUNT);
   const golden = Math.PI * (3 - Math.sqrt(5));
@@ -37,8 +40,10 @@ if (renderer) {
 
   const uniforms = {
     uTime: { value: 0 },
+    uTwinkle: { value: reduced ? 0 : 1 },
+    uExpand: { value: 0 },
     uPixel: { value: renderer.getPixelRatio() },
-    uAlpha: { value: mobile ? .35 : .7 }
+    uAlpha: { value: mobile ? .6 : 1 }
   };
 
   const noise = /* glsl */`
@@ -72,33 +77,52 @@ if (renderer) {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
     vertexShader: noise + /* glsl */`
-      uniform float uTime; uniform float uPixel;
+      uniform float uTime; uniform float uTwinkle; uniform float uExpand; uniform float uPixel;
       attribute float aRnd;
-      varying float vN; varying float vDepth;
+      varying float vN; varying float vDepth; varying float vSpark; varying float vExpand;
       void main(){
         vec3 p = position;
-        float n = snoise(p * 1.2 + vec3(uTime * .04));
-        p *= 1.7 + n * .12;
+        float n = snoise(p * 1.2 + vec3(uTime * .05));
+        // Expand on scroll: each point drifts outward at its own pace,
+        // so the globe opens up and thins out rather than just growing.
+        float e = uExpand * uExpand;
+        p *= (1.7 + n * .12) * (1. + e * (2.2 + aRnd * 3.5));
+
+        // Twinkle: roughly 1 in 5 points glints now and then, each on its own slow cycle.
+        float spark = 0.;
+        if (aRnd > .8) {
+          float ph = aRnd * 157.;
+          float s = .5 + .5 * sin(uTime * (1.2 + fract(ph) * 1.8) + ph);
+          spark = pow(s, 10.) * uTwinkle;
+        }
+
         vec4 mv = modelViewMatrix * vec4(p, 1.);
         gl_Position = projectionMatrix * mv;
-        gl_PointSize = (1.6 + aRnd * 1.6) * uPixel * (5.5 / -mv.z);
-        vN = n; vDepth = -mv.z;
+        gl_PointSize = min((2. + aRnd * 2. + spark * 5.) * uPixel * (5.5 / -mv.z), 7. * uPixel);
+        vN = n; vDepth = -mv.z; vSpark = spark; vExpand = uExpand;
       }`,
     fragmentShader: /* glsl */`
       uniform float uAlpha;
-      varying float vN; varying float vDepth;
+      varying float vN; varying float vDepth; varying float vSpark; varying float vExpand;
       void main(){
         float d = length(gl_PointCoord - .5);
         if (d > .5) discard;
-        float glow = smoothstep(.5, 0., d);
-        vec3 a = vec3(.45, .78, 1.);   // soft blue
-        vec3 b = vec3(.55, .52, .95);  // soft indigo
+        float core = smoothstep(.5, 0., d);
+        float glint = smoothstep(.22, 0., d);           // bright centre for sparkles
+        vec3 a = vec3(.42, .82, 1.);                    // bright sky blue
+        vec3 b = vec3(.62, .55, 1.);                    // soft violet
         vec3 col = mix(a, b, smoothstep(-.5, .5, vN));
-        float fade = smoothstep(9., 3.8, vDepth);
-        gl_FragColor = vec4(col, glow * .55 * fade * uAlpha);
+        col = mix(col, vec3(1.), vSpark * .85);          // sparkles flash near-white
+        float fade = smoothstep(10., 3.6, vDepth);
+        float alpha = (core * .9 + glint * vSpark * 1.5) * fade * uAlpha;
+        alpha *= 1. - smoothstep(.2, .85, vExpand);     // dissolve to nothing as it expands
+        gl_FragColor = vec4(col, alpha);
       }`
   });
   const points = new THREE.Points(geo, mat);
+  // Slight tilt so the rotation reads as a globe turning.
+  points.rotation.x = 0.35;
+  points.rotation.z = -0.12;
   scene.add(points);
 
   function resize() {
@@ -112,41 +136,47 @@ if (renderer) {
   resize();
   window.addEventListener("resize", resize);
 
-  // Fade the globe to nothing as the hero scrolls away (opacity only, no motion).
-  // Once it is fully faded, rendering pauses so nothing sits behind the content.
+  // Scroll progress through the hero: 0 at the top, 1 once it is mostly out of view.
   const hero = document.querySelector(".hero");
-  let faded = false;
-  function onScroll() {
+  let target = 0;
+  function progress() {
     const h = hero ? hero.offsetHeight : window.innerHeight;
-    const p = Math.min(Math.max(window.scrollY / (h * .6), 0), 1);
-    const o = 1 - p * p * (3 - 2 * p); // smoothstep: eases in and out
-    canvas.style.opacity = o.toFixed(3);
-    canvas.style.visibility = o <= 0.001 ? "hidden" : "visible";
-    const wasFaded = faded;
-    faded = o <= 0.001;
-    if (wasFaded && !faded && !running) requestAnimationFrame(tick);
+    return Math.min(Math.max(window.scrollY / (h * .75), 0), 1);
   }
-  window.addEventListener("scroll", onScroll, { passive: true });
 
   let visible = !document.hidden;
-  document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible && !faded && !running) requestAnimationFrame(tick); });
-
-  // Subtle rotation: one full turn about every 100 seconds, on a slight tilt.
-  // It always runs (it's slow and steady); with reduce-motion on, only the
-  // surface 'breathing' is switched off.
-  points.rotation.x = 0.35;
-  points.rotation.z = -0.12;
-  const start = performance.now();
   let running = false;
+  let gone = false;
+
+  function onScroll() {
+    target = progress();
+    if (target < 1 && gone) { gone = false; canvas.style.visibility = "visible"; }
+    if (!running && visible && !gone) requestAnimationFrame(tick);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  document.addEventListener("visibilitychange", () => {
+    visible = !document.hidden;
+    if (visible && !running && !gone) requestAnimationFrame(tick);
+  });
+
+  const start = performance.now();
+  const SPEED = .1; // radians per second: one full turn about every minute
   function tick() {
-    if (!visible || faded) { running = false; return; }
+    if (!visible) { running = false; return; }
     running = true;
     const t = (performance.now() - start) / 1000;
     if (!reduced) uniforms.uTime.value = t;
-    points.rotation.y = t * .063;
+    // Ease the expansion towards the scroll position so it never jumps.
+    uniforms.uExpand.value += (target - uniforms.uExpand.value) * .12;
+    points.rotation.y = t * SPEED;
     renderer.render(scene, camera);
+    // Fully dissolved: stop drawing until the user scrolls back up.
+    if (target >= 1 && uniforms.uExpand.value > .995) {
+      gone = true; running = false; canvas.style.visibility = "hidden"; return;
+    }
     requestAnimationFrame(tick);
   }
-  onScroll();
-  if (!running) tick();
+  target = progress();
+  uniforms.uExpand.value = target;
+  tick();
 }
