@@ -12,4 +12,4 @@ Live at **https://imtrinity94.github.io**
 
 ## Stack
 
-Plain HTML/CSS/JS with no build step. The background is a slow, subtle WebGL particle sphere (Three.js, bundled in `assets/vendor`). It stays still when the system's reduce-motion setting is on. Blog posts come from the cloudblogger.co.in WordPress.com public API. Shortcuts: `Ctrl/⌘ K` or `/` opens the command palette.
+Plain HTML/CSS/JS with no build step. The hero is a slowly turning cluster of glass-wireframe objects (cloud, server rack, database, gears, workflow, run button, containers, network, `{ }`, `>_`, `JS`) drawn with Three.js and custom shaders. Scrolling down ungroups it and shatters each object into glowing glass shards; scrolling up reassembles it. Three.js, its FontLoader and a tiny glyph subset are bundled in `assets/vendor`. Blog posts come from the cloudblogger.co.in WordPress.com public API. Shortcuts: `Ctrl/⌘ K` or `/` opens the command palette.
